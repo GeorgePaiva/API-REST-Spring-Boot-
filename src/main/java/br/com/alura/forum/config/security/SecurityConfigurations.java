@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
@@ -28,12 +29,13 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	// Configurações de Autorização
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/topicos").permitAll()
-				.antMatchers(HttpMethod.GET, "/topicos/*").permitAll().anyRequest().authenticated() // Solicita
-																									// autenticão para
-																									// qualquer outra
-																									// request.
-				.and().formLogin();
+		http.authorizeRequests()
+				.antMatchers(HttpMethod.GET, "/topicos").permitAll()
+				.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
+				.antMatchers(HttpMethod.POST, "/auth").permitAll()
+				.anyRequest().authenticated() // Solicita autenticão para qualquer outra request.
+				.and().csrf().disable() // Csrf - cross-site request forgery(tipo de ataque hacker que acontece em aplicações web).
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //  Não é para criar sessão, porque vamos usar token
 	}
 
 	// Configurações de Recursos Estáticos
