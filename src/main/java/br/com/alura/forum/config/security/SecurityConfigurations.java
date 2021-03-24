@@ -19,7 +19,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AutenticacaoService autenticacaoService;
-	
+
 	@Override
 	@Bean
 	protected AuthenticationManager authenticationManager() throws Exception {
@@ -39,6 +39,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, "/topicos").permitAll()
 				.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
 				.antMatchers(HttpMethod.POST, "/auth").permitAll()
+				.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
 				.anyRequest().authenticated() // Solicita autenticão para qualquer outra request.
 				.and().csrf().disable() // Csrf - cross-site request forgery(tipo de ataque hacker que acontece em aplicações web).
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //  Não é para criar sessão, porque vamos usar token
